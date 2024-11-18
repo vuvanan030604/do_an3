@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Sinh Viên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/anh2.png'); /* Đặt đường dẫn tới hình ảnh nền */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .container {
+            width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Màu nền trắng có độ trong suốt */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Danh Sách Sinh Viên</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Họ Tên</th>
+                    <th>MSSV</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ student[0] }}</td>
+                    <td>{{ student[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="form-container">
+            <h3>Thêm Sinh Viên</h3>
+            <form method="post" action="http://localhost:5000/add_student">
+                <div class="input-group">
+                    <label for="hoten">Họ Tên:</label>
+                    <input type="text" id="hoten" name="hoten" required>
+                </div>
+                <div class="input-group">
+                    <label for="mssv">MSSV:</label>
+                    <input type="text" id="mssv" name="mssv" required>
+                </div>
+                <button type="submit">Thêm</button>
+            </form>
+            {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-container">
+            <h3>Lọc MSSV</h3>
+            <form method="post" action="http://localhost:5000/search_student">
+                <div class="input-group">
+                    <label for="mssv_filter">MSSV:</label>
+                    <input type="text" id="mssv_filter" name="mssv_filter" required>
+                </div>
+                <button type="submit">Lọc</button>
+            </form>
+        </div>
+
+        {% if filtered_student %}
+        <h2>Thông Tin Sinh Viên Lọc</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Họ Tên</th>
+                    <th>MSSV</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ filtered_student[0] }}</td>
+                    <td>{{ filtered_student[1] }}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+
+        <div class="form-container">
+            <h3>Xóa Sinh Viên</h3>
+            <form method="post" action="http://localhost:5000/delete_student">
+                <div class="input-group">
+                    <label for="mssv_delete">MSSV:</label>
+                    <input type="text" id="mssv_delete" name="mssv" required>
+                </div>
+                <button type="submit">Xóa</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
